@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Carnet d'addresses</title>
+        <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/index.css">
+        <script src="../script/vue.js"></script>
+        <script src="../script/moment.js"></script>
+    </head>
+    <body>
+        <main id="app" class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <section class="card">
+                        <div class="card-header">
+                            PROJET NODE.JS / VUE.JS
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <section class="col-xl-12">
+                                    <h1>Carnet d'adresses</h1>
+                                </section>
+                                <section class="col-xl-12">
+                                    <div class="toast-header">
+                                        <span>Les anniversaires des 7 prochains jours :</span>
+                                    </div>
+                                    <div class="toast-body">
+                                        <ul class="list-group">
+                                            <li class="list-group-item list-group-item-primary text-center">Cliquez sur la case à cocher lorsque vous avez acheté votre cadeau</li>
+                                            <li class="list-group-item" v-for="(weekBirthday, index) in weekBirthdays">
+                                                <input type="checkbox" class="cadeau" @click="gifted(index)">
+                                                {{ weekBirthday.firstname }} {{ weekBirthday.lastname }} né(e) le {{ weekBirthday.birthdate }} fête ses  {{ weekBirthday.age }} ans
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </section>
+
+
+                                <section class="col-xl-12">
+                                    <form class="form-inline" @submit.prevent>
+                                        <div class="form-group">
+                                            <a id="btn-add" class="btn btn-primary" href="/new">Ajouter un contact</a>
+                                        </div>
+                                        <div class="form-group input-group" id="searchgroup">
+                                            <input type="text" placeholder="Recherchez par nom, prénom, numéros..." class="form-control" v-model="search">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-warning glyphicon glyphicon-search" @click="searchMembers">Recherche</button>
+                                            </div>
+                                        </div>
+                                      </form>
+                                </section>
+
+
+                                <section class="col-xl-12">
+                                    <table id="tbl-listmembers" class="table table-striped table-hover">
+                                        <thead>
+                                            <th>Prénom</th>
+                                            <th>Nom</th>
+                                            <th>Téléphone fixe</th>
+                                            <th>Téléphone portable</th>
+                                            <th>Adresse</th>
+                                            <th>Date de naissance</th>
+                                            <th>Actions</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(member, n) in searchResult">
+                                                <td>{{ member.firstname }}</td>
+                                                <td>{{ member.lastname }}</td>
+                                                <td>{{ member.phoneFixe }}</td>
+                                                <td>{{ member.phonePortable }}</td>
+                                                <td>{{ member.address }}</td>
+                                                <td>{{ member.birthdate }}</td>
+                                                <td>
+                                                    <a class="btn btn-primary" :href='"/update/"+n'>Modifier</a>&nbsp;&nbsp;
+                                                    <button class="btn btn-warning" @click="removeMember(n)">Supprimer</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </section>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <script>
+
+            const app = new Vue({
+                el: '#app',
+                data: {
+                    members: [],
+                    weekBirthdays: [],
+                    search: '',
+                    searchResult : [],
+                },
+                // computed: {
+                //     age: function(){
+                //         this.
+                //     }
+                // },
+                mounted() {
+                    
+                    if (localStorage.getItem('members')) {
+                        try {
+                            this.members = JSON.parse(localStorage.getItem('members'));
+                            this.searchResult = this.members;
+                        } catch(e) {
+                            localStorage.removeItem('members');
+                        }
+                    }
+
+                    everybody = this.members;
+                    
+                    today = moment().subtract(1, "days").format(moment().format("YYYY")+"-MM-DD");
+                    inAWeek = moment().add(7, "days").format(moment().format("YYYY")+"-MM-DD");
+                    
+                    for(let i=0; i<=(everybody.length)-1; i++){
+                        birthdate = moment(everybody[i]["birthdate"], "DD/MM/YYYY").format(moment().format("YYYY")+"-MM-DD");
+                        if(moment(birthdate).isBetween(today, inAWeek)){
+                            if (!everybody[i]["giftBought"]) {
+                                this.weekBirthdays[this.weekBirthdays.length] = {
+                                    // this.weekBirthdays[i] = {
+                                    firstname : everybody[i]["firstname"],
+                                    lastname : everybody[i]["lastname"],
+                                    birthdate : everybody[i]["birthdate"],
+                                    index : i,
+                                    age: moment().year() - moment(everybody[i]["birthdate"], "DD/MM/YYYY").year()
+                                }
+                            }
+                        }else{
+                            if (everybody[i]["giftBought"]) {
+                                this.members[i]["giftBought"] = false;
+                                this.saveMembers();
+                            }
+                        }
+                    }
+                },
+                methods: {
+                    /* ----- Suppression d'un membre dans le localstorage ----- */
+                    removeMember(x) {
+                        this.members.splice(x, 1);
+                        this.saveMembers();
+                    },
+                    
+                    /* ----- Méthode gérant la liste des anniversaires affichés en fonction du fait que le cadeau soit acheté ou non ----- */
+                    gifted(index) {
+
+                        memberId = this.weekBirthdays[index]["index"];
+
+                        this.members[memberId]["giftBought"] = true;
+
+                        this.saveMembers();
+
+                        this.weekBirthdays.splice(index, 1);
+
+                        checkboxes = document.getElementsByClassName('cadeau');
+
+                        for (let j = 0; j < checkboxes.length; j++) {
+                            checkboxes[j]["checked"] = false;                            
+                        }
+
+                    },
+
+                    /* ----- Affichage des membres en fonction du contenu de la barre de recherche ----- */
+                    searchMembers() {
+                        var result = [];
+                        var members = this.members;
+                        var search = this.search.toLowerCase();
+                        if(this.search == '' || !this.search){
+                            members.map(member => result.push(member));
+                        } else {
+                            for (var i = 0; i < members.length; i++) {
+                                if(members[i].firstname.toLowerCase().includes(search)){
+                                    result.push(members[i]);
+                                    continue;
+                                }
+                                if(members[i].lastname.toLowerCase().includes(search)){
+                                    result.push(members[i]);
+                                    continue;
+                                }
+                                if(members[i].phoneFixe.includes(search)){
+                                    result.push(members[i]);
+                                    continue;
+                                }
+                                if(members[i].phonePortable.includes(search)){
+                                    result.push(members[i]);
+                                    continue;
+                                }
+                            }
+                        }
+                        this.searchResult = result;
+                    },
+
+                    /* ----- Sauvegarde des membres dans le localstorage ----- */
+                    saveMembers() {
+                        const parsed = JSON.stringify(this.members);
+                        localStorage.setItem('members', parsed);
+                    }
+                }
+            })
+        </script>  
+    </body>
+</html>

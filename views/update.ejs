@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <title>Carnet d'addresses</title>
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/index.css">
+        <script src="../script/vue.js"></script>
+        <script src="../script/moment.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <section class="card">
+                        <div class="card-header">
+                            PROJET NODE.JS / VUE.JS
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <section class="col-xl-12">
+                                    <h1>Modification d'un contact</h1>
+                                </section>
+                                <section class="col-xl-12">
+                                    <form id="app" class="form" @submit.prevent="checkForm" method="POST">
+                                        <div class="alert alert-success" v-if="success">
+                                            <p>Modification du contact réussie</p>
+                                            <p>Vous allez être redirigé vers la page d'acceuil</p>
+                                        </div>
+                                        <div class="alert alert-danger" v-if="errors.length">
+                                            <p>
+                                                <b>Veuillez corriger les erreurs :</b>
+                                                <ul>
+                                                    <li v-for="error in errors">{{ error }}</li>
+                                                </ul>
+                                            </p>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="firstname" class="col-sm-2 col-form-label">Prénom :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="firstname" v-model="name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="lastname" class="col-sm-2 col-form-label">Nom :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="lastname" v-model="lastname">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="phoneFixe" class="col-sm-2 col-form-label">n° Fixe :</label>
+                                            <div class="col-sm-10">
+                                                <input type="number" class="form-control" id="phoneFixe" v-model="phoneFixe">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="phonePortable" class="col-sm-2 col-form-label">n° Portable :</label>
+                                            <div class="col-sm-10">
+                                                <input type="number" class="form-control" id="phonePortable" v-model="phonePortable">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="address" class="col-sm-2 col-form-label">Adresse :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="address" v-model="address">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="birthdate" class="col-sm-2 col-form-label">Date de naissance :</label>
+                                            <div class="col-sm-10">
+                                                <input type="date" class="form-control" id="birthdate" v-model="birthdate">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" class="btn btn-primary" value="Modifier">
+                                            <a class="btn btn-info" href="/">Revenir à la page d'accueil</a>
+                                        </div>
+                                    </form>
+                                </section>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2>Modification d'un contact</h2>
+                </div>
+            </div>
+            <form id="app" class="form" @submit.prevent="checkForm" method="POST">
+                <div class="row">
+                    <div class="form-groupe col-sm-12">
+                        <a class="btn btn-info" href="/">Revenir à la page d'accueil</a>
+                    </div>
+                    <div class="alert alert-danger" v-if="errors.length">
+                        <p>
+                            <b>Veuillez corriger les erreurs :</b>
+                            <ul>
+                                <li v-for="error in errors">{{ error }}</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="firstname" class="col-sm-2 col-form-label">Prénom :</label>
+                        <input type="text" id="firstname" v-model="name">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="lastname" class="col-sm-2 col-form-label">Nom :</label>
+                        <input type="text" id="lastname" v-model="lastname">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="phoneFixe" class="col-sm-2 col-form-label">Tél fixe :</label>
+                        <input type="number" id="phoneFixe" v-model="phoneFixe">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="phonePortable" class="col-sm-2 col-form-label">Tél portable :</label>
+                        <input type="number" id="phonePortable" v-model="phonePortable">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="address" class="col-sm-2 col-form-label">Adresse :</label>
+                        <input type="text" id="address" v-model="address">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="birthdate" class="col-sm-2 col-form-label">Date de naissance :</label>
+                        <input type="text" id="birthdate" v-model="birthdate">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <input type="submit" class="btn btn-primary" value="Modifier">
+                    </div>
+                </fieldset>
+            </form> -->
+        </main>
+
+        <script>
+            formattedDate = moment().format("YYYY-MM-DD");
+            const app = new Vue({
+                el: '#app',
+                data: {
+                    members: [],
+                    member: [],
+                    name: '',
+                    lastname: '',
+                    phoneFixe: '',
+                    phonePortable: '',
+                    address: '',
+                    birthdate: formattedDate,
+                    giftBought: false,
+                    errors: [],
+                    success: false
+                },
+                mounted() {
+                    if (localStorage.getItem('members')) {
+                        try {
+                            this.members = JSON.parse(localStorage.getItem('members'));
+                        } catch(e) {
+                            localStorage.removeItem('members');
+                        }
+                    }
+
+
+                    if (localStorage.getItem('members')) {
+                        try {
+                            this.member = this.members[<%= index %>];
+
+                            this.name = this.member["firstname"];
+                            this.lastname = this.member["lastname"];
+                            this.phoneFixe= this.member["phoneFixe"];
+                            this.phonePortable = this.member["phonePortable"];
+                            this.address= this.member["address"];
+                            this.birthdate= moment(this.member["birthdate"], "DD/MM/YYYY").format("YYYY-MM-DD");
+                            this.giftBought= this.member["giftBought"];
+
+                        } catch(e) {
+                            localStorage.removeItem('members');
+                        }
+                    }
+
+
+                
+                },
+                methods: {
+                    checkForm() {
+                        //On vide le tableau de la liste des erreurs
+                        this.errors = [];
+
+                        //On reformatte la date
+                        this.birthdate = moment(this.birthdate, "YYYY-MM-DD").format("DD/MM/YYYY");
+                        
+                        //On vérifie si un seul des champs est vide
+                        //Si oui on liste tout ceux qui le sont
+                        if (!this.name || !this.lastname || !this.address || !this.phoneFixe || !this.phonePortable || !this.birthdate ) {
+                            if (!this.name) {
+                                this.errors.push("Vous devez entrer un prénom");
+                            }
+                            if (!this.lastname) {
+                                this.errors.push("Vous devez entrer un nom");
+                            }
+                            if (!this.address) {
+                                this.errors.push("Vous devez entrer une adresse");
+                            }
+                            if (!this.phoneFixe) {
+                                this.errors.push("Vous devez entrer un numéro de téléphone fixe");
+                            }
+                            if (!this.phoneFixe) {
+                                this.errors.push("Vous devez entrer un numéro de téléphone portable");
+                            }
+                            if (!this.birthdate) {
+                                this.errors.push("Vous devez entrer une date de naissance");
+                            }
+                            this.success = false;
+                            return false;
+                        }
+
+
+                        //vérifier prénom contient 3 caractères
+                        if (!this.name.match("^.{3,}$")) {
+                            this.errors.push("Votre prénom doit contenir au moins 3 caractères !")
+                        }
+                        //vérifier prénom contient que des lettres
+                        if (!this.name.match("[a-zA-Z]{1,}")) {
+                            this.errors.push("Votre prénom ne peut pas contenir autre chose que des lettres !")
+                        }
+                        // vérifier nom contient 2 caractères
+                        if (!this.lastname.match("^.{2,}$")) {
+                            this.errors.push("Votre nom doit contenir au moins de 2 lettres !");
+                        }
+                        //vérifier nom contient que des lettres
+                        if (!this.lastname.match("[a-zA-Z]{2,}")) {
+                            this.errors.push("Votre nom ne peut pas contenir autre chose que des lettres !");
+                        }
+
+                        // vérifier contenu tel fixe
+                        if (this.phoneFixe.match("[a-zA-Z]{1,}")) {
+                            this.errors.push("Le numéro fixe ne peux contenir que des chiffres");
+                        }
+                        // vérifier format tel portable
+                        if (!this.phoneFixe.match("[0]{1}[0-9]{9}")) {
+                            this.errors.push("Le numéro fixe doit commencer par 0 et contenir 10 chiffres");
+                        }
+
+                        // vérifier contenu tel portable
+                        if (this.phonePortable.match("[a-zA-Z]{1,}")) {
+                            this.errors.push("Le numéro de portable ne peux contenir que des chiffres");
+                        }
+                        // vérifier format tel portable
+                        if (!this.phonePortable.match("[0]{1}[0-9]{9}")) {
+                            this.errors.push("Le numéro fixe doit commencer par 0 et contenir 10 chiffres");
+                        }
+
+                        //Vérifier date de naissance
+                        format = true;
+                        if(!this.birthdate.match("[0-9]{2}\/[0-9]{2}\/[0-9]{4}")){
+                            this.errors.push("La date doit être au format 'JJ/MM/AAAA'");
+                            format = false;
+                        }
+                        
+                        //S'il y a une erreur on ne valide pas l'ajout sinon on lance addMember
+                        if(this.errors.length > 0){
+                            this.success = false;
+                            return;
+                        }else{
+                            this.updateMember();
+                        }          
+                    },
+                    updateMember() {
+                        if (!this.name && !this.lastname && !this.address && !this.phoneFixe && !this.phonePortable && !this.address) {
+                            return;
+                        }
+
+                        this.member["firstname"] = this.name;
+                        this.member["lastname"] = this.lastname;
+                        this.member["phoneFixe"] = this.phoneFixe;
+                        this.member["phonePortable"] = this.phonePortable;
+                        this.member["address"] = this.address;
+                        this.member["birthdate"] = this.birthdate;
+                        this.member["giftBought"] = this.giftBought;
+
+                        this.members[<%= index %>] = this.member;
+
+                        this.saveMembers();
+
+                        this.success = true;
+
+                        this.name = this.member["firstname"];
+                        this.lastname = this.member["lastname"];
+                        this.phoneFixe= this.member["phoneFixe"];
+                        this.phonePortable = this.member["phonePortable"];
+                        this.address= this.member["address"];
+                        this.birthdate= moment(this.member["birthdate"], "DD/MM/YYYY").format("YYYY-MM-DD");
+                        this.giftBought= this.member["giftBought"];
+
+                        setTimeout(() => {
+                            window.location.replace("/");
+                        }, 3000);
+                        
+                    },
+                    saveMembers() {
+                        const parsed = JSON.stringify(this.members);
+                        localStorage.setItem('members', parsed);
+                    }
+                }
+            })
+        </script>  
+    </body>
+</html>

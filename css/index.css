@@ -1,0 +1,55 @@
+body {
+    background-color: #e4e4e4;
+}
+.container {
+    min-height: 100%;
+    padding: 50px 32px;
+}
+
+.card {
+    padding: 0;
+}
+.card-header {
+    background-color: #325D88;
+    color: #FFFFFF;
+}
+.card-body {
+    padding: 0 40px;
+}
+
+section {
+    padding: 10px 0;
+}
+
+h1 {
+    color: #325D88;
+    text-align: center;
+    font-variant: small-caps;
+    font-weight: bold;
+}
+h3 {
+    color: #325D88;
+    text-align: center;
+}
+
+#searchgroup {
+    position: absolute;
+    right: 30px;
+}
+#searchgroup > input {
+    width: 300px;
+}
+
+.toast-header {
+    background-color: #3E3F3A;
+    color: #FFFFFF;
+    font-size: 18px;
+    padding: 8px;
+    font-weight: normal;
+}
+.toast-body {
+    padding: 0;
+}
+.list-group-item-info {
+    color: #000000;
+}

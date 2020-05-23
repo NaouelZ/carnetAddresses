@@ -1,0 +1,24 @@
+{
+    "name": "myApp",
+    "version": "0.0.1",
+    "description": "My Project",
+    "dependencies": {
+        "bootstrap": "^4.4.1",
+        "ejs": "^3.1.2",
+        "express": "*",
+        "nodemon": "^2.0.3"
+    },
+    "engine": "node >=0.6.x",
+    "scripts": {
+        "start": "nodemon server.js"
+    },
+    "main": "server.js",
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "author": "myApp",
+    "license": "myApp",
+    "homepage": "/",
+    "private": true
+}
